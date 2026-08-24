@@ -1,0 +1,12 @@
+# 10. Review Checklist
+
+- [ ] Dependencies point inward? (No domain → application/UI imports.)
+- [ ] Any `throw`/`try`/`catch`/`on Exception` inside domain, use cases, or datasource *business* code? (Allowed: adapter-boundary `tryCatch`, UI ring.)
+- [ ] Entities immutable + equatable? Operations return new instances?
+- [ ] Every repository has **≥2 datasource adapters** and runs the contract suite against all of them?
+- [ ] Failures typed, layer-mapped (datasource failure ≠ domain failure leaked)?
+- [ ] sqlite3 done with drift? Any other ORM/raw sqlite3 in the tree?
+- [ ] Any unapproved builder/codegen (freezed, json_serializable, riverpod_generator)? If yes — why?
+- [ ] Tests: shouldly only (no `expect()` mixing), Given/When/Then names, both Either sides covered, mocks only at the use-case seam with mocktail?
+- [ ] `melos.yaml` anywhere? (Bad smell — migrate.)
+- [ ] `dart analyze` and `dart test` green across the workspace?
