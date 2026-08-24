@@ -1,5 +1,8 @@
-> Derived from `docs/01`–`docs/12`. The full sections are authoritative. If you edit the bible,
-> REGENERATE this blob (ask an agent: "regenerate docs/00-compact.md from the other docs/ files").
+> ⚠️ **BOT-ONLY FILE — humans, stay out.**
+> This is the compact, token-cheap ingest blob for agents. **Do not hand-edit it.**
+> Edit the human docs (`docs/01`–`docs/12`), then regenerate this blob
+> (ask an agent: "regenerate docs/00-compact.md from the other docs/ files").
+> The full sections are authoritative; this blob is derived and drifts the moment it's hand-edited.
 
 # DART/FLUTTER BIBLE — COMPACT (bot ingest)
 
