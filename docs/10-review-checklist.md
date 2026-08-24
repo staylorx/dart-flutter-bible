@@ -15,4 +15,6 @@
 - [ ] Write methods expose optional `IUnitOfWork? uow` on the contract; reads may take one but never require it? Adapters wrap real transactions or gracefully sink?
 - [ ] Example code in tests first? `examples/` only for packages (pub.dev) or a genuine need (e.g., core facade)? No code in READMEs/prose? Doctrine snippets small and tight?
 - [ ] `melos.yaml` anywhere? (Bad smell — migrate.)
-- [ ] `dart analyze` and `dart test` green across the workspace?
+- [ ] `dart analyze --fatal-infos --fatal-warnings` reports **zero diagnostics** (no errors, no warnings, no infos) and `dart test` green across the workspace?
+- [ ] No `TODO`/`FIXME` comments anywhere? Deferred work lives in the roadmap doc, not code.
+- [ ] Any `// ignore:` is per-line with a reason — no `ignore_for_file` or blanket suppressions?

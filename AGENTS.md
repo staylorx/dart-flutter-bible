@@ -17,4 +17,4 @@ This is the **Dart/Flutter Bible**: a standards repo (doctrine docs + CI-tested 
 ## Housekeeping
 
 - The GitHub wiki auto-syncs from `docs/` on every push to `main` — no manual wiki step.
-- Keep the working tree clean: `dart format` / `dart analyze` / `dart test` before committing.
+- Keep the working tree clean before committing: `dart format`; `dart analyze --fatal-infos --fatal-warnings` reporting **zero diagnostics of any severity** (errors, warnings, infos — "clean" means literally nothing); `dart test`.

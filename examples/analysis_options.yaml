@@ -1,5 +1,9 @@
 include: package:lints/recommended.yaml
 
+analyzer:
+  errors:
+    todo: error
+
 linter:
   rules:
     public_member_api_docs: true

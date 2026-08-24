@@ -6,7 +6,7 @@
 | Package manager | pub (Dart 3.5+ **pub workspaces**) |
 | Monorepo | **melos 7** — configured entirely in root `pubspec.yaml` |
 | Formatter | `dart format` only |
-| Analyzer | `dart analyze` clean before any commit |
+| Analyzer | `dart analyze` — **zero diagnostics of any severity** (errors, warnings, infos) before any commit; gate = `dart analyze --fatal-infos --fatal-warnings` (§2 "Analyzer: zero tolerance") |
 | Docs | Terse `///` on every public member (1–2 lines, what+why) — dartdoc/pub.dev-ready |
 | Tests | `dart test` |
 
@@ -32,7 +32,7 @@ dev_dependencies:
 
 melos:
   scripts:
-    analyze: dart analyze
+    analyze: dart analyze --fatal-infos --fatal-warnings
     test: dart test
 ```
 
@@ -49,6 +49,26 @@ Notes:
 - The `workspace:` list is explicit — globs are not supported yet; list every package.
 - `melos bootstrap` links local packages without `pubspec_overrides.yaml` (workspaces replaced that mechanism).
 - Scripts live in the `melos:` key; run with `melos run <name>`.
+
+### Analyzer: zero tolerance
+
+"Clean" means **zero diagnostics — errors, warnings, and infos alike.** A report of
+"zero errors, only warnings/infos remain" is not a pass; it is a failing state with a
+known cause. There is no such thing as a harmless analyzer finding, and an agent that
+reports a pass while any diagnostic remains is wrong, full stop.
+
+- **The gate is the fatal flags, not plain analyze.** Plain `dart analyze` exits 0 on
+  infos alone, so it can't be trusted as a gate. Run `dart analyze --fatal-infos
+  --fatal-warnings` in CI and in melos scripts — every diagnostic of any severity
+  becomes a non-zero exit.
+- **TODOs are diagnostics, not exceptions.** Map `todo` to `error` in
+  `analysis_options.yaml` (`analyzer: errors: todo: error`), so a TODO comment is a
+  compile error. Deferred work goes in the project roadmap doc — never in a code
+  comment. No TODO survives into merged or released code.
+- **Suppression is per-line or nothing.** A rule that genuinely doesn't apply gets
+  `// ignore: <rule_code>` on the offending line (with a reason when the intent isn't
+  obvious). Never `// ignore_for_file:`. Never disable a rule in `analysis_options.yaml`.
+  If a lint fires everywhere, the code is wrong — not the lint.
 
 ### Dart-first editing
 
