@@ -3,6 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'account.dart';
 import 'account_failure.dart';
 import 'i_account_repository.dart';
+import 'i_unit_of_work.dart';
 
 /// In-memory adapter: a legitimate second adapter and the use-case test double.
 class InMemoryAccountRepository implements IAccountRepository {
@@ -19,7 +20,9 @@ class InMemoryAccountRepository implements IAccountRepository {
   Future<Either<AccountFailure, Account>> create({
     required String id,
     required String holder,
+    IUnitOfWork? uow,
   }) async {
+    // In-memory ops are atomic; uow is accepted for contract uniformity.
     if (_accounts.containsKey(id)) {
       return Left(AccountAlreadyExists(id: id));
     }

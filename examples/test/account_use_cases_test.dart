@@ -47,4 +47,22 @@ void main() {
       });
     });
   });
+
+  group('Given a CreateAccountUseCase with a no-op unit of work', () {
+    final useCase = CreateAccountUseCase(InMemoryAccountRepository());
+
+    group('When creating with uow passed to the seam', () {
+      test('Then it still creates the account (non-transactional sink)',
+          () async {
+        final result =
+            await useCase.call(id: 'acct-2', holder: 'Carol', uow: const NoOpUnitOfWork());
+
+        result.isRight().should.be(true);
+        result
+            .getOrElse((_) => throw StateError('expected Right'))
+            .holder
+            .should.be('Carol');
+      });
+    });
+  });
 }

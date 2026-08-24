@@ -12,5 +12,6 @@
 - [ ] Use-case `call()` takes discrete business params (`id`, `userName`, …), never cargo/container objects?
 - [ ] Dart named parameters everywhere (sole exceptions: single positional `ref`/`message`)? Flutter widgets follow Flutter conventions?
 - [ ] One hand-written barrel per package (`lib/<package>.dart` re-exports `lib/src/`), no `src/` imports across packages?
+- [ ] Write methods expose optional `IUnitOfWork? uow` on the contract (reads never take one)? Adapters wrap real transactions or gracefully sink?
 - [ ] `melos.yaml` anywhere? (Bad smell — migrate.)
 - [ ] `dart analyze` and `dart test` green across the workspace?

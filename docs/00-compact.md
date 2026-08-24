@@ -41,6 +41,7 @@
 ## PERSISTENCE
 - sqlite3 -> drift. Tests: NativeDatabase.memory().
 - File store -> sembast. Tests: databaseFactoryMemory.
+- UnitOfWork: write methods take optional `IUnitOfWork? uow` (reads NEVER take one); transactional adapters (drift/sembast/isar) wrap real transactions, others gracefully sink (NoOp/best-effort). Contract stays uniform.
 - Repository + datasource CONTRACTS live in the domain package. Repos orchestrate/validate; datasources do mechanical I/O. Contract tests live in core, never the UI repo.
 
 ## TESTING
