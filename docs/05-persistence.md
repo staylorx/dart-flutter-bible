@@ -35,10 +35,35 @@ final db = await databaseFactoryMemory.openDatabase(inMemoryDatabasePath);
 
 - Use sembast when a NoSQL document store is the right shape, or when "one file, zero plugins" matters. SQL-shaped data goes to drift.
 
+### UnitOfWork: optional transactions at the contract
+
+Some stores are transactional (drift, sembast, isar); some aren't (plain JSON files). The contract treats transactions as a first-class, optional thing:
+
+```dart
+abstract interface class IAccountRepository {
+  /// Returns the account with [id]; pass [uow] to read consistently inside a
+  /// transaction — most reads won't need it.
+  Future<Either<AccountFailure, Account>> get({
+    required String id,
+    IUnitOfWork? uow,
+  });
+
+  /// Creates an account; pass [uow] to join a larger transaction.
+  Future<Either<AccountFailure, Account>> create({
+    required String id,
+    required String holder,
+    IUnitOfWork? uow,
+  });
+}
+```
+
+- **`IUnitOfWork`** is a domain-package contract (`run<T>(Future<T> Function() work)`); transactional adapters implement it over their native transaction (`db.transaction(...)`).
+- **Write methods** (`create`, `update`, `delete`, …) take `IUnitOfWork? uow` — optional at the seam, so callers can join a transaction when they need atomicity. **Reads** (`get`, `list`) *may* take one too: usually they don't, but a read inside a transaction (consistency, read-your-writes) should accept it. Reads never *require* it.
+- **Every adapter does the honest thing:** drift/sembast/isar wrap their real transaction; JSON and other non-transactional stores gracefully emulate or sink it (best-effort single load-modify-persist, or `NoOpUnitOfWork`). The contract still declares `uow`, so the seam is uniform — callers who need atomicity get it where the store can provide it, and nothing silently breaks where it can't.
+
 ### General rules
 
 - Repositories orchestrate and validate; datasources do mechanical I/O. No business logic in a datasource, no I/O in a repository.
 - All datasource methods return `Either`/`TaskEither` with the datasource failure hierarchy. `tryCatch` lives here.
-- Transactions: `UnitOfWork` pattern when multi-entity atomicity is required (see the skill's reference files).
 
 ---

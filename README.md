@@ -8,7 +8,7 @@
 
 | Doc | Section |
 |---|---|
-| [00 — Compact](docs/00-compact.md) | Condensed bot-readable blob of the whole bible — ingest this first (~1K tokens) |
+| [00 — Compact](docs/00-compact.md) | Bot-only ingest blob — **do not hand-edit**; regenerate from the human docs |
 | [01 — Architecture](docs/01-architecture.md) | The bulls-eye, the four laws, the two-adapter rule |
 | [02 — Toolchain & Melos](docs/02-toolchain.md) | SDK range, melos 7 + pub workspaces (`melos.yaml` is a bad smell) |
 | [03 — Repository Topology](docs/03-topology.md) | One-workspace repo vs core-repo + UI-repo; the application layer as facade |

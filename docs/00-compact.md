@@ -1,5 +1,8 @@
-> Derived from `docs/01`–`docs/12`. The full sections are authoritative. If you edit the bible,
-> REGENERATE this blob (ask an agent: "regenerate docs/00-compact.md from the other docs/ files").
+> ⚠️ **BOT-ONLY FILE — humans, stay out.**
+> This is the compact, token-cheap ingest blob for agents. **Do not hand-edit it.**
+> Edit the human docs (`docs/01`–`docs/12`), then regenerate this blob
+> (ask an agent: "regenerate docs/00-compact.md from the other docs/ files").
+> The full sections are authoritative; this blob is derived and drifts the moment it's hand-edited.
 
 # DART/FLUTTER BIBLE — COMPACT (bot ingest)
 
@@ -41,6 +44,7 @@
 ## PERSISTENCE
 - sqlite3 -> drift. Tests: NativeDatabase.memory().
 - File store -> sembast. Tests: databaseFactoryMemory.
+- UnitOfWork: write methods take optional `IUnitOfWork? uow` (reads MIGHT take one); transactional adapters (drift/sembast/isar) wrap real transactions, others gracefully sink (NoOp/best-effort). Contract stays uniform.
 - Repository + datasource CONTRACTS live in the domain package. Repos orchestrate/validate; datasources do mechanical I/O. Contract tests live in core, never the UI repo.
 
 ## TESTING

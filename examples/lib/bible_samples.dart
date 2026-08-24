@@ -6,4 +6,6 @@ export 'src/account_failure.dart';
 export 'src/create_account_use_case.dart';
 export 'src/get_account_use_case.dart';
 export 'src/i_account_repository.dart';
+export 'src/i_unit_of_work.dart';
 export 'src/in_memory_account_repository.dart';
+export 'src/no_op_unit_of_work.dart';
