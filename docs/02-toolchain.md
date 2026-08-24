@@ -74,4 +74,18 @@ Each package exposes **exactly one public entry point**: `lib/<package_name>.dar
 - What's exported *is* the public API: nothing gets into the barrel until it's deliberate. Private-by-default beats doc-marking later.
 - Melos/publishing and the wiki rendering all assume this: the barrel is the contract a package ships. Melos manages *packages*; it does not write your barrels.
 
+### Enforcement: lint vs. review
+
+Not every rule in this bible can be automated. Know which is which:
+
+**Lint-enforced (self-enforcing — `dart analyze` is the gate):**
+- `public_member_api_docs` — missing `///` on any public member fails the build. Note: stricter than pub.dev's scoring floor (≥20% coverage earns full points); we hold the harder line on purpose.
+- `implementation_imports` — cross-package `package:thing/src/...` imports fail. Already on by default via `package:lints/recommended`.
+
+**Review-enforced (no lint exists — don't invent one):**
+- Cargo/business params — that's intent, not syntax. No rule can tell a container from a cohesive value object.
+- Barrel freshness — nothing catches a stale barrel or a class added to `src/` without an export. A custom analyzer plugin *could*, but that's over-engineering for something review catches in seconds.
+
+The review checklist (§10) is the gate for the second group.
+
 ---
