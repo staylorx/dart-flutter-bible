@@ -6,6 +6,6 @@
 4. Set `resolution: workspace` in every package; `melos bootstrap`.
 5. Define the domain contracts first (entities, failures, `I*Repository`, datasource interfaces). Nothing else until these compile.
 6. Implement **two adapters** and the shared **contract test suite** from day one.
-7. Wire `analysis_options.yaml` (lints, strict) at root; `dart analyze` clean.
-8. Write the first use case + its mocktail test (both Either sides).
+7. Wire `analysis_options.yaml` (lints, strict, **`public_member_api_docs`**) at root; `dart analyze` clean.
+8. Write the first use case — terse `///` docs (≤2 lines), business-param `call()`, named params — plus its mocktail test (both Either sides).
 9. Commit. CI runs `melos run analyze` + `melos run test` on every PR.
