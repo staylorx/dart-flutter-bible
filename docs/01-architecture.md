@@ -25,6 +25,18 @@
 3. **Flow is one direction:** UI → use case → repository interface → datasource adapter. No sideways jumps. No UI talking to a datasource. No use case instantiating a widget.
 4. **Exceptions are a UI-boundary phenomenon.** Everywhere inside the bulls-eye, failure is a *value* (fpdart `Either`/`TaskEither`). Only the outermost ring may throw or catch. We are rust-like: failures are typed tuples, not jumps.
 
+In code, the flow looks like this:
+
+```dart
+// UI ring — the only place exceptions live:
+final result = await getAccount(id: id);
+result.fold((failure) => ErrorView(failure), (account) => AccountView(account));
+
+// Application ring — a use case is a thin coordinator:
+Future<Either<AccountFailure, Account>> call({required String id}) =>
+    _repository.get(id: id);
+```
+
 ### The Two-Adapter Rule (the one we never skip)
 
 **Every repository contract gets at least two datasource adapters.** One real persistence adapter is not enough — with only one adapter, the contract is whatever that adapter happens to do. Two adapters (e.g. drift/sqlite + in-memory, or drift + sembast) force the contract to be the *interface*, and a shared **contract test suite** runs against every adapter, so a deviation in any implementation fails CI.
