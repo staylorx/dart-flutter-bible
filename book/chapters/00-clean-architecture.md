@@ -39,12 +39,11 @@ quietly Rust-flavored. Rust has no exceptions; failure is a value —
 boundary, where continuing would be lying. The bible's rule — exceptions
 only at the UI ring, failure as a value everywhere inside — is the same
 philosophy, and fpdart's `Either` is `Result`'s calmer cousin. In some
-ways, Dart with FP is like Rust for people who don't hate themselves: you
-get the type-checked failure handling without the borrow checker arguing
-with you about everything.
+ways, Dart with FP is like Rust for people who aren't commited to wedding the borrow checker: you
+get the type-checked failure handling without arguing about everything. And unlike Rust, TaskEither is Result with Futures and async, and one much profit lies for those who embrace async and TaskEither.
 
 **What this means for the rest of the book.** When a rule looks
-arbitrary, trace it back — the lineage is usually talking. When this book
+arbitrary, trace it back — this lineage is usually talking. When this book
 says "the standard wins," it means the standard wins until a better idea
 comes up the road; chapter 11 is the record of those forks, made on
 purpose.
