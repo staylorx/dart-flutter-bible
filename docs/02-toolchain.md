@@ -65,4 +65,13 @@ Every public class, method, and field gets a `///` doc comment — **at least on
 
 **Named parameters, always** — with exactly two exceptions: a single positional parameter named `ref` or `message`. **Flutter widgets follow Flutter's own conventions** (framework-mandated named params, positional `child`/`key`-style usage, etc.), not these rules.
 
+### Barrel files: one public door per package
+
+Each package exposes **exactly one public entry point**: `lib/<package_name>.dart`, a hand-written barrel that re-exports the public API from `lib/src/`. Everything else under `lib/` is private.
+
+- Consumers import the barrel only — **never** `package:thing/src/...` paths. `src/` is an implementation detail.
+- Barrels are **hand-maintained** (part of the one-class-per-file discipline): one export line per public class. No codegen, no wildcard exports.
+- What's exported *is* the public API: nothing gets into the barrel until it's deliberate. Private-by-default beats doc-marking later.
+- Melos/publishing and the wiki rendering all assume this: the barrel is the contract a package ships. Melos manages *packages*; it does not write your barrels.
+
 ---

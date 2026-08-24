@@ -10,6 +10,7 @@
 | Public docs | **Terse `///` on every public member** (1–2 lines, what+why) — dartdoc/pub.dev-ready; `public_member_api_docs` on; use cases documented |
 | Use-case params | **Discrete business params** (`id`, `userName`, …) — never cargo/container objects |
 | Dart params | **Named parameters**, sole exceptions: single positional `ref`/`message`; Flutter follows Flutter conventions |
+| Barrels | **One hand-written barrel per package** (`lib/<package>.dart` re-exports `lib/src/`); never import `src/` across packages |
 
 ### Roadmap
 - **Team promotion:** this bible is destined for a team-facing git wiki. Vault doc stays canonical; the wiki is a published rendering. See `WIKI_PLAN.md` in this folder.

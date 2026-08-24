@@ -19,7 +19,7 @@
 - WIDGETS -> USECASES ONLY: no widget imports repository, datasource, or entity factory; providers wrap use cases.
 - melos.yaml = BAD SMELL. Modern melos 7 + native pub workspaces.
 - SDK constraint: '>=3.10.0 <4.0.0' in every pubspec.
-- One class per file; barrel exports. dart format / dart analyze / dart test only. Dart-first editing: no Python/sed rewriting .dart files.
+- One class per file; ONE hand-written barrel per package (`lib/<pkg>.dart` re-exports `lib/src/`; never import `src/` across packages). dart format / dart analyze / dart test only. Dart-first editing: no Python/sed rewriting .dart files.
 - TERSE DOCS: every public member gets `///` (1-2 lines, what+why, never how) — dartdoc/pub.dev-ready; `public_member_api_docs` lint ON. Use cases MUST be documented.
 - PARAMS: usecase/repo methods take DISCRETE business params (id, userName, ...), never cargo objects (AddUserUseCase(UserBlockOfStuff) = NO). Dart: named params except single positional `ref`/`message`; Flutter follows Flutter.
 
@@ -56,11 +56,11 @@
 1 read compact (or full) bible; 2 root pubspec with workspace + melos keys (no melos.yaml); 3 packages: domain / usecases / 2 datasource adapters / app; 4 resolution: workspace + melos bootstrap; 5 contracts first (entities, failures, I*Repository, datasource interfaces); 6 two adapters + contract suite from day one; 7 lints incl. public_member_api_docs + dart analyze clean; 8 first usecase (documented, business-param call, named params) + both-sides test; 9 CI runs analyze + test.
 
 ## REVIEW (checklist)
-- Inward dependencies? Throw/try/catch outside UI ring? Entities immutable + equatable? >=2 adapters + contract suite? Failure layers mapped, no leakage? drift the only ORM? Unapproved builders? shouldly only, GWT names, both Either sides? No melos.yaml? analyze + test green? Public API documented (<=2 lines, use cases included)? Params business-shaped, no cargo? Named params (except ref/message)?
+- Inward dependencies? Throw/try/catch outside UI ring? Entities immutable + equatable? >=2 adapters + contract suite? Failure layers mapped, no leakage? drift the only ORM? Unapproved builders? shouldly only, GWT names, both Either sides? No melos.yaml? analyze + test green? Public API documented (<=2 lines, use cases included)? Params business-shaped, no cargo? Named params (except ref/message)? One barrel per package, no src/ imports?
 
 ## DECISIONS (settled)
 - State: Riverpod (plain providers). DI: manual constructor injection. Nav: go_router. JSON codegen: banned for now. License: MIT. Wiki: auto-synced by wiki-sync GitHub Action on every push to main.
-- Docs: terse `///` on every public member (1-2 lines, what+why); public_member_api_docs ON; use cases documented. Params: named except single positional ref/message; usecase call() = discrete business params, never cargo objects. Flutter follows Flutter conventions.
+- Docs: terse `///` on every public member (1-2 lines, what+why); public_member_api_docs ON; use cases documented. Params: named except single positional ref/message; usecase call() = discrete business params, never cargo objects. Barrels: one hand-written per package (lib/<pkg>.dart), never import src/ across packages. Flutter follows Flutter conventions.
 
 ## LINKS
 - Repo: https://github.com/staylorx/dart-flutter-bible · Wiki: https://github.com/staylorx/dart-flutter-bible/wiki
