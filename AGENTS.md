@@ -8,10 +8,11 @@ This is the **Dart/Flutter Bible**: a standards repo (doctrine docs + CI-tested 
 - Human docs `docs/01-architecture.md` … `docs/12-sources.md` are authoritative. Load the full section only when its detail matters.
 - If you edit any human doc, **regenerate `docs/00-compact.md`** afterwards (prompt: "regenerate docs/00-compact.md from the other docs/ files").
 
-## Code lives in examples/
+## Code lives in tests first, examples/ only for packages
 
-- Executable samples are in `examples/` (`bible_samples`), CI-tested by `dart analyze` + `dart test` (`.github/workflows/examples-ci.yml`) on every push/PR.
-- Do **not** put code in READMEs or prose docs — samples belong in `examples/` or in tests. Small illustrative snippets inside the doctrine docs are the only exception.
+- Example code lives in **tests** first — fully exercised and documented there.
+- `examples/` is a package deliverable: published packages (pub.dev) get a real, CI-tested `examples/`. Cores, CLIs, TUIs, GUIs skip it unless there's a genuine need (e.g., a core facade example so GUI implementers see the seam).
+- Do **not** put code in READMEs or prose docs (bible §2 "Code placement"). Small illustrative snippets inside the doctrine docs are the only exception.
 
 ## Housekeeping
 
