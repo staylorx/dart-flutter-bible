@@ -40,22 +40,40 @@ Datasources get their own low-level hierarchy (`DatasourceFailure` → `Serializ
 
 ```dart
 abstract class IAccountRepository {
-  Future<Either<AccountFailure, Account>> get(String id);
+  /// Returns the account with [id], or [AccountNotFound].
+  Future<Either<AccountFailure, Account>> get({required String id});
+
+  /// Returns every account, oldest first.
   Future<Either<AccountFailure, List<Account>>> list();
-  Future<Either<AccountFailure, Account>> deposit({required String id, required double amount});
+
+  /// Credits [amount] to the account with [id].
+  Future<Either<AccountFailure, Account>> deposit(
+      {required String id, required double amount});
 }
 ```
 
-Use cases return the same shape:
+Use cases return the same shape — and take **discrete business params, never cargo objects**:
 
 ```dart
+/// Fetches a single account.
 class GetAccountUseCase {
   final IAccountRepository _repository;
   const GetAccountUseCase(this._repository);
 
-  Future<Either<AccountFailure, Account>> call(String id) => _repository.get(id);
+  /// Returns the account with [id], or [AccountNotFound].
+  Future<Either<AccountFailure, Account>> call({required String id}) =>
+      _repository.get(id: id);
 }
 ```
+
+### Use-case parameters: business params, not cargo
+
+A use case's `call()` takes the **actual business inputs** as discrete named parameters — `AddUserUseCase` receives `id`, `userName`, `email`, … — never a cargo/container object (`AddUserUseCase(UserBlockOfStuff(...))`).
+
+Why:
+- The signature *is* the documentation; a call site reads like the business operation.
+- No anonymous container types to define, serialize, or pass across layer boundaries.
+- A parameter list that outgrows ~4–5 business inputs is a smell: usually a missing entity or a use case doing too much. Reach for a domain entity (or value object) then, not a bag of fields.
 
 ### Composition
 
@@ -65,7 +83,7 @@ class GetAccountUseCase {
 ```dart
 final result = await Either.Do(
   ($) async {
-    final account = await $(repository.get(id));
+    final account = await $(repository.get(id: id));
     final updated = await $(repository.deposit(id: account.id, amount: 100));
     return updated;
   },

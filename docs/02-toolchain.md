@@ -7,6 +7,7 @@
 | Monorepo | **melos 7** — configured entirely in root `pubspec.yaml` |
 | Formatter | `dart format` only |
 | Analyzer | `dart analyze` clean before any commit |
+| Docs | Terse `///` on every public member (1–2 lines, what+why) — dartdoc/pub.dev-ready |
 | Tests | `dart test` |
 
 ### Melos: the modern way (and the bad smell)
@@ -52,5 +53,16 @@ Notes:
 ### Dart-first editing
 
 We are a Dart shop. Structural changes to `.dart` files are made with Dart tooling (`dart format`, targeted edits), never with Python/shell text-munging scripts. This is non-negotiable and applies to agent workflows too.
+
+### Docs: terse, always
+
+Every public class, method, and field gets a `///` doc comment — **at least one line, never more than two**. Say *what* it is and *why* it exists; never restate the implementation. This is a hard requirement: pub.dev scores on doc coverage (`public_member_api_docs`) and every dartdoc-style generator needs real comments to produce anything useful.
+
+- **Use cases are the priority.** Every `*UseCase` documents what it does and what it returns.
+- Enforce it: enable `public_member_api_docs` in `analysis_options.yaml`; keep `dart analyze` clean.
+
+### Dart parameter style
+
+**Named parameters, always** — with exactly two exceptions: a single positional parameter named `ref` or `message`. **Flutter widgets follow Flutter's own conventions** (framework-mandated named params, positional `child`/`key`-style usage, etc.), not these rules.
 
 ---

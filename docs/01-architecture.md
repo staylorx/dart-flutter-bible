@@ -31,4 +31,10 @@
 
 In-memory adapters are legitimate second adapters, and they double as the test double for use-case tests — prefer them over mocking where feasible.
 
+### The API surface (docs, params, style)
+
+- **Terse docs:** every public member gets a `///` comment, 1–2 lines — *what* and *why*, never *how*. dartdoc/pub.dev-ready; the `public_member_api_docs` lint stays on. Use cases **must** be documented.
+- **Business params:** a use case's `call()` takes discrete business inputs (`id`, `userName`, …), never a cargo object (`AddUserUseCase(UserBlockOfStuff(...))`). The signature is the documentation.
+- **Named parameters** in Dart — sole exceptions: a single positional `ref` or `message`. Flutter widgets follow Flutter conventions.
+
 ---
