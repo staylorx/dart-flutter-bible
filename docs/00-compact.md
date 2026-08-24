@@ -6,7 +6,6 @@
 ## IDENTITY
 - Repo: staylorx/dart-flutter-bible (fork of taybiz/dart-flutter-bible). Authoritative. License: MIT.
 - Framing: "our standard — open to change by proposal", not "the law".
-- Reference impl: internal banking_cli — NOT public/inspectable; doctrine self-contained in docs + skill examples (public skeleton = open item).
 
 ## RULES (non-negotiable)
 - Bulls-eye clean architecture: entities at center; dependencies point INWARD; flow one direction UI -> usecase -> repository -> datasource.

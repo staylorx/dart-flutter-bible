@@ -20,7 +20,7 @@
 | [09 — Bootstrap Checklist](docs/09-bootstrap-checklist.md) | New project, from workspace to green CI |
 | [10 — Review Checklist](docs/10-review-checklist.md) | The questions every review answers |
 | [11 — Decisions & Roadmap](docs/11-decisions.md) | Settled doctrine (Riverpod, DI, navigation) + roadmap |
-| [12 — Sources of Truth](docs/12-sources.md) | Packages, docs, reference implementation |
+| [12 — Sources of Truth](docs/12-sources.md) | Canonical packages and docs |
 
 ## Wiki
 

@@ -24,4 +24,4 @@ _None open. Propose in a PR; when settled, add a row above and update the sectio
 
 ### Roadmap
 
-- **Team promotion:** this bible is destined for a team-facing git wiki. Vault doc stays canonical; the wiki is a published rendering. See `WIKI_PLAN.md` in this folder.
+- **Team promotion:** this bible is destined for a team-facing git wiki. Vault doc stays canonical; the wiki is a published rendering.
