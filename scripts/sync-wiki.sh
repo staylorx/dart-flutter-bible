@@ -47,6 +47,24 @@ copy_page() {
 cp "$ROOT_DIR/README.md" Home.md
 printf '\n---\n[Back to the repo](https://github.com/%s)\n' "$REPO" >> Home.md
 
+# Rewrite repo-relative links to wiki links (GitHub wikis don't resolve docs/*.md paths)
+sed -i \
+  -e 's|](docs/01-architecture.md)|](Architecture)|g' \
+  -e 's|](docs/02-toolchain.md)|](Toolchain-and-Melos)|g' \
+  -e 's|](docs/03-topology.md)|](Repository-Topology)|g' \
+  -e 's|](docs/04-functional-core.md)|](Functional-Core)|g' \
+  -e 's|](docs/05-persistence.md)|](Persistence)|g' \
+  -e 's|](docs/06-testing.md)|](Testing)|g' \
+  -e 's|](docs/07-builders.md)|](Builders-and-Codegen)|g' \
+  -e 's|](docs/08-flutter-ring.md)|](Flutter-Ring)|g' \
+  -e 's|](docs/09-bootstrap-checklist.md)|](Bootstrap-Checklist)|g' \
+  -e 's|](docs/10-review-checklist.md)|](Review-Checklist)|g' \
+  -e 's|](docs/11-decisions.md)|](Decisions-and-Roadmap)|g' \
+  -e 's|](docs/12-sources.md)|](Sources-of-Truth)|g' \
+  -e "s|](docs/00-compact.md)|](https://github.com/${REPO}/blob/main/docs/00-compact.md)|g" \
+  -e "s|](LICENSE)|](https://github.com/${REPO}/blob/main/LICENSE)|g" \
+  Home.md
+
 copy_page 01-architecture         Architecture
 copy_page 02-toolchain            Toolchain-and-Melos
 copy_page 03-topology             Repository-Topology
