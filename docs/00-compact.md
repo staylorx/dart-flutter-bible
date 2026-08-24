@@ -25,6 +25,7 @@
 - TERSE DOCS: every public member gets `///` (1-2 lines, what+why, never how) — dartdoc/pub.dev-ready; `public_member_api_docs` lint ON. Use cases MUST be documented.
 - PARAMS: usecase/repo methods take DISCRETE business params (id, userName, ...), never cargo objects (AddUserUseCase(UserBlockOfStuff) = NO). Dart: named params except single positional `ref`/`message`; Flutter follows Flutter.
 - ENFORCEMENT: lint-enforced (analyze gate) = public_member_api_docs + implementation_imports (default-on); review-enforced (§10) = cargo params, barrel freshness. Don't invent lints for taste rules.
+- CODE PLACEMENT: code lives in examples/ (CI-tested) or tests — never READMEs/prose; doctrine docs carry small illustrative snippets only (tight, not piles).
 
 ## STACK (pinned)
 - fpdart ^1.2.0 · equatable ^2.x · shouldly (assertions, "should be" idiom) · mocktail (mocks, usecase seam only) · drift + drift_dev + build_runner (sqlite3 ORM; SANCTIONED codegen) · sembast (pure-Dart file store) · melos ^7.0.0 · flutter_riverpod (plain providers) · go_router (nav).

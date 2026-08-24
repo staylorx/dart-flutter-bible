@@ -11,7 +11,7 @@ This is the **Dart/Flutter Bible**: a standards repo (doctrine docs + CI-tested 
 ## Code lives in examples/
 
 - Executable samples are in `examples/` (`bible_samples`), CI-tested by `dart analyze` + `dart test` (`.github/workflows/examples-ci.yml`) on every push/PR.
-- Do **not** put code in READMEs or prose docs — samples belong in `examples/` or in tests. Small illustrative snippets inside the doctrine docs are the only exception.
+- Do **not** put code in READMEs or prose docs — samples belong in `examples/` or in tests. Small illustrative snippets inside the doctrine docs are the only exception (bible §2 "Code placement").
 
 ## Housekeeping
 

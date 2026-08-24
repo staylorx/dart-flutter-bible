@@ -74,6 +74,10 @@ Each package exposes **exactly one public entry point**: `lib/<package_name>.dar
 - What's exported *is* the public API: nothing gets into the barrel until it's deliberate. Private-by-default beats doc-marking later.
 - Melos/publishing and the wiki rendering all assume this: the barrel is the contract a package ships. Melos manages *packages*; it does not write your barrels.
 
+### Code placement: examples/, not prose
+
+Code belongs in **`examples/`** (when a package is being built) or in **tests** — fully exercised and documented there. **Never in READMEs or prose documentation**, with the very smallest exceptions (a one-line command, a filename). The doctrine docs themselves may carry small illustrative snippets — tight, not piles — because a snippet in context teaches faster than a pointer; but anything that must compile and stay true is `examples/` or a test. See `examples/` (`bible_samples`) for the CI-tested reference.
+
 ### Enforcement: lint vs. review
 
 Not every rule in this bible can be automated. Know which is which:

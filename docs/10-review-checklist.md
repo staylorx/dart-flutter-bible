@@ -13,5 +13,6 @@
 - [ ] Dart named parameters everywhere (sole exceptions: single positional `ref`/`message`)? Flutter widgets follow Flutter conventions?
 - [ ] One hand-written barrel per package (`lib/<package>.dart` re-exports `lib/src/`), no `src/` imports across packages?
 - [ ] Write methods expose optional `IUnitOfWork? uow` on the contract; reads may take one but never require it? Adapters wrap real transactions or gracefully sink?
+- [ ] No code in READMEs/prose? Samples live in `examples/` or tests, CI-exercised? Doctrine snippets small and tight?
 - [ ] `melos.yaml` anywhere? (Bad smell — migrate.)
 - [ ] `dart analyze` and `dart test` green across the workspace?
