@@ -27,6 +27,13 @@ MANUSCRIPT="$BUILD/manuscript.md"
 cat book/front-matter.md >> "$MANUSCRIPT"
 printf '\n\n' >> "$MANUSCRIPT"
 cat book/how-to-read.md >> "$MANUSCRIPT"
+printf '\n\n' >> "$MANUSCRIPT"
+for intro in book/chapters/00-*.md; do
+  if [[ -f "$intro" ]]; then
+    cat "$intro" >> "$MANUSCRIPT"
+    printf '\n\n' >> "$MANUSCRIPT"
+  fi
+done
 for f in docs/0[1-9]-*.md docs/1[0-2]-*.md; do
   num="$(basename "$f" | cut -c1-2)"
   printf '\n\n' >> "$MANUSCRIPT"
@@ -41,6 +48,13 @@ done
 printf '\n\n' >> "$MANUSCRIPT"
 cat book/back-matter.md >> "$MANUSCRIPT"
 echo "manuscript: $(wc -l < "$MANUSCRIPT") lines"
+
+# --- 1b. Diagrams (re-render when graphviz is available; committed PNGs are the fallback)
+if command -v dot >/dev/null 2>&1; then
+  bash scripts/render-diagrams.sh
+else
+  echo "graphviz dot not found — using committed diagram PNGs"
+fi
 
 # --- 2. EPUB ----------------------------------------------------------------
 EPUB="$BUILD/structuring-successful-dart-and-flutter-projects.epub"

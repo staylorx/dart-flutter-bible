@@ -7,23 +7,23 @@ digraph BullsEye {
 
   subgraph cluster_ui {
     label="UI / Presentation (Flutter) — exceptions live here, and only here";
-    style="rounded,filled"; fillcolor="#e2e8f0"; color="#64748b"; fontcolor="#0f172a";
+    style="rounded,filled"; fillcolor="#e2e8f0"; color="#64748b"; fontcolor="#0f172a"; margin=16;
     ui [label="Widgets, providers, composition root", fillcolor="#f8fafc", style="rounded,filled"];
 
     subgraph cluster_app {
       label="Application / Use Cases — orchestration, no I/O, no Flutter";
-      style="rounded,filled"; fillcolor="#dbeafe"; color="#3b82f6"; fontcolor="#1e3a8a";
+      style="rounded,filled"; fillcolor="#dbeafe"; color="#3b82f6"; fontcolor="#1e3a8a"; margin=16;
       uc [label="Use cases, repository contracts", fillcolor="#eff6ff", style="rounded,filled"];
 
       subgraph cluster_domain {
         label="Domain — THE CENTER: pure Dart, no I/O, equatable + fpdart only";
-        style="rounded,filled"; fillcolor="#dcfce7"; color="#16a34a"; fontcolor="#14532d";
+        style="rounded,filled"; fillcolor="#dcfce7"; color="#16a34a"; fontcolor="#14532d"; margin=16;
         domain [label="Entities, value objects, failures", fillcolor="#f0fdf4", style="rounded,filled"];
       }
     }
   }
   adapters [label="Datasource adapters live outside\n(drift/sqlite, sembast, http, in-memory)", shape=box, style="rounded,dashed,filled", fillcolor="#fef3c7", color="#d97706", fontcolor="#78350f"];
   ui -> adapters [style=dashed, constraint=false];
-  ui -> uc [style=invis];
-  uc -> domain [style=invis];
+  ui -> uc [style=invis, arrowhead=none];
+  uc -> domain [style=invis, arrowhead=none];
 }

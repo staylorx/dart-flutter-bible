@@ -9,6 +9,11 @@ The bulls-eye exists so that file never happens. It is the doctrine's
 answer to a simple question: *what is the part of your app you can least
 afford to re-learn?*
 
+The shape itself is not new — it is Robert C. Martin's Clean Architecture
+diagram, and chapter 0 tells the full lineage. What this doctrine adds is
+the Dart/Flutter instantiation: the two-adapter rule, failures as values,
+and the discipline that makes the diagram hold.
+
 ![The bulls-eye: dependencies point inward; exceptions live only in the UI ring](book/diagrams/bulls-eye.png)
 
 The answer is the center: the entities and rules that decide what your
@@ -28,6 +33,13 @@ The Four Laws are just that answer, stated as constraints:
 4. **Exceptions are a UI-boundary phenomenon.** Inside the bulls-eye,
    failure is a value. This is the rule that turns "error handling" from
    a chore into a type-system feature.
+
+Rust programmers will recognize the fourth law immediately: Rust has no
+exceptions, `Result<T, E>` is a type, and panics belong only at the
+boundary. fpdart's `Either` is the same idea — failure as a value, wired
+into the type system. In some ways, Dart with FP is like Rust for people
+who don't hate themselves: the safety, without the borrow checker arguing
+with you about everything.
 
 ![One-direction flow, with two adapters sharing one contract suite](book/diagrams/dependency-flow.png)
 
