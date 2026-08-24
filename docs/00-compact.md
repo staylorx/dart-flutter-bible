@@ -59,7 +59,7 @@
 ## REVIEW (checklist)
 - Inward dependencies? Throw/try/catch outside UI ring? Entities immutable + equatable? >=2 adapters + contract suite? Failure layers mapped, no leakage? drift the only ORM? Unapproved builders? shouldly only, GWT names, both Either sides? No melos.yaml? analyze + test green? Public API documented (<=2 lines, use cases included)? Params business-shaped, no cargo? Named params (except ref/message)? One barrel per package, no src/ imports?
 
-## DECISIONS (settled)
+## DECISIONS (settled; §11 = human change record, doctrine wins)
 - State: Riverpod (plain providers). DI: manual constructor injection. Nav: go_router. JSON codegen: banned for now. License: MIT. Wiki: auto-synced by wiki-sync GitHub Action on every push to main.
 - Docs: terse `///` on every public member (1-2 lines, what+why); public_member_api_docs ON; use cases documented. Params: named except single positional ref/message; usecase call() = discrete business params, never cargo objects. Barrels: one hand-written per package (lib/<pkg>.dart), never import src/ across packages. Flutter follows Flutter conventions.
 
