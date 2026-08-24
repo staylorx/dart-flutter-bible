@@ -6,7 +6,6 @@
 ## IDENTITY
 - Repo: staylorx/dart-flutter-bible (fork of taybiz/dart-flutter-bible). Authoritative. License: MIT.
 - Framing: "our standard — open to change by proposal", not "the law".
-- Reference impl: banking_cli (dart-clean-architecture skill walkthrough only).
 
 ## RULES (non-negotiable)
 - Bulls-eye clean architecture: entities at center; dependencies point INWARD; flow one direction UI -> usecase -> repository -> datasource.
@@ -65,4 +64,5 @@
 
 ## LINKS
 - Repo: https://github.com/staylorx/dart-flutter-bible · Wiki: https://github.com/staylorx/dart-flutter-bible/wiki
+- Examples: `examples/` — bible_samples package, CI-tested (dart analyze + dart test on every push)
 - Full docs: docs/01-architecture.md .. docs/12-sources.md (this blob = docs/00-compact.md)

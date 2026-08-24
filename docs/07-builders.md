@@ -10,6 +10,17 @@ We **avoid codegen builders** wherever we can. Generated code hides logic, slows
 | `riverpod_generator` | ❌ Plain providers (`Provider`, `FutureProvider`, `NotifierProvider`) suffice; no annotation codegen. |
 | `retrofit`/`dio_gen` | ❌ Hand-written HTTP datasource with `tryCatch`. |
 
+Dart 3 replaces the most-tempting builders natively:
+
+```dart
+// No freezed needed — sealed classes + exhaustive switch are built in:
+sealed class AccountFailure {}
+final class AccountNotFound extends AccountFailure {
+  final String id;
+  const AccountNotFound({required this.id});
+}
+```
+
 **The test for whether a builder earns its place:** does the generated code encode a contract we'd otherwise hand-maintain and get wrong (SQL table ↔ Dart row mapping)? Drift passes. Almost everything else fails.
 
 ---

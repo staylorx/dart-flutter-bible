@@ -20,6 +20,27 @@ Flutter is delivery. All the doctrine above applies *behind* it; this section is
 - No widget reads a database, HTTP client, or platform storage — directly, or through a provider that skips the use-case seam.
 - Providers wrap use cases and expose derived state (loading / data / failure). A widget's job: call use case → render state.
 
+```dart
+// Provider wraps the use case — the only seam a widget sees:
+final accountProvider = FutureProvider.autoDispose<Account>((ref) async {
+  final result = await ref.watch(getAccountUseCaseProvider)(id: accountId);
+  return result.fold((f) => throw const AccountLoadException(), (a) => a);
+});
+
+// Widget: call use case → render state. No repository, no datasource, no factories.
+class AccountView extends ConsumerWidget {
+  const AccountView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) =>
+      ref.watch(accountProvider).when(
+            data: (account) => Text(account.holder),
+            error: (_, __) => const Text('could not load'),
+            loading: () => const CircularProgressIndicator(),
+          );
+}
+```
+
 ### Widget conventions
 
 - **Dumb widgets:** widgets render state and emit events; they do not contain business rules, validation, or storage logic.
