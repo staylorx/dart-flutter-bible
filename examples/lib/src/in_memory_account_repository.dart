@@ -10,7 +10,11 @@ class InMemoryAccountRepository implements IAccountRepository {
   final Map<String, Account> _accounts = {};
 
   @override
-  Future<Either<AccountFailure, Account>> get({required String id}) async {
+  Future<Either<AccountFailure, Account>> get({
+    required String id,
+    IUnitOfWork? uow,
+  }) async {
+    // In-memory reads are atomic; uow is accepted for contract uniformity.
     final account = _accounts[id];
     if (account == null) return Left(AccountNotFound(id: id));
     return Right(account);
