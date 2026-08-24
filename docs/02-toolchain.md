@@ -74,9 +74,15 @@ Each package exposes **exactly one public entry point**: `lib/<package_name>.dar
 - What's exported *is* the public API: nothing gets into the barrel until it's deliberate. Private-by-default beats doc-marking later.
 - Melos/publishing and the wiki rendering all assume this: the barrel is the contract a package ships. Melos manages *packages*; it does not write your barrels.
 
-### Code placement: examples/, not prose
+### Code placement: tests first, examples only for packages
 
-Code belongs in **`examples/`** (when a package is being built) or in **tests** — fully exercised and documented there. **Never in READMEs or prose documentation**, with the very smallest exceptions (a one-line command, a filename). The doctrine docs themselves may carry small illustrative snippets — tight, not piles — because a snippet in context teaches faster than a pointer; but anything that must compile and stay true is `examples/` or a test. See `examples/` (`bible_samples`) for the CI-tested reference.
+Know what we build: **cores** (pure-Dart libraries), **packages** (published to pub.dev), **CLIs**, **TUIs**, **GUIs** (Flutter). Where example code lives depends on the deliverable:
+
+- **Tests are the default home for all example code** — fully exercised and documented there. If it compiles and demonstrates something, it belongs in a test before anywhere else.
+- **`examples/` is a package deliverable.** pub.dev expects it, so published packages get a real, CI-tested `examples/`. Non-published deliverables (cores, CLIs, TUIs, GUIs) skip it unless there's a genuine need — e.g., a core ships a small facade example so GUI implementers can see the seam wired. Otherwise: tests.
+- **Never in READMEs or prose documentation**, with the very smallest exceptions (a one-line command, a filename). The doctrine docs themselves may carry small illustrative snippets — tight, not piles — but anything that must compile and stay true is a test or `examples/`.
+
+See `examples/` (`bible_samples`) for the CI-tested reference.
 
 ### Enforcement: lint vs. review
 

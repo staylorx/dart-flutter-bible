@@ -1,5 +1,7 @@
 # 3. Repository Topology & Package Layout
 
+Deliverable types: **core** (pure-Dart library), **package** (published), **CLI**, **TUI**, **GUI**. Example-code policy depends on type — see §2 "Code placement".
+
 The bulls-eye maps to repos. Two topologies are sanctioned; pick per project:
 
 ### Topology A — one workspace repo (small / pure-Dart projects)
