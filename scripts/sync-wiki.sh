@@ -1,20 +1,41 @@
 #!/usr/bin/env bash
 # Regenerate the GitHub wiki from docs/ and push.
-# Usage: scripts/sync-wiki.sh [wiki-clone-dir]   (default: /tmp/dart-flutter-bible.wiki)
+#
+# Local:  scripts/sync-wiki.sh [wiki-clone-dir]   (default: /tmp/dart-flutter-bible.wiki)
+# CI:     GITHUB_TOKEN + GITHUB_REPOSITORY env vars are picked up automatically
+#         (used by .github/workflows/wiki-sync.yml).
 set -euo pipefail
 
-REPO="staylorx/dart-flutter-bible"
+REPO="${GITHUB_REPOSITORY:-staylorx/dart-flutter-bible}"
 WIKI_DIR="${1:-/tmp/dart-flutter-bible.wiki}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Clone the wiki repo if we don't have it yet (wiki repos use branch master)
+if [ -n "${GITHUB_TOKEN:-}" ]; then
+  WIKI_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${REPO}.wiki.git"
+else
+  WIKI_URL="git@github.com:${REPO}.wiki.git"
+fi
+
+# GitHub only materializes a wiki's git repo after the first page is saved
+# (open the repo's Wiki tab and save a placeholder page once).
+if ! git ls-remote "$WIKI_URL" >/dev/null 2>&1; then
+  echo "wiki not initialized yet — open the repo's Wiki tab and save a first page, then re-run."
+  exit 0
+fi
+
 if [ ! -d "$WIKI_DIR/.git" ]; then
-  git clone "git@github.com:${REPO}.wiki.git" "$WIKI_DIR"
+  git clone "$WIKI_URL" "$WIKI_DIR"
 fi
 cd "$WIKI_DIR"
 git checkout master 2>/dev/null || git checkout -b master
 git pull --ff-only origin master 2>/dev/null || true
+
+# git identity — CI runners have none; local uses the user's configured identity
+if ! git config user.name >/dev/null 2>&1; then
+  git config user.name "github-actions[bot]"
+  git config user.email "github-actions[bot]@users.noreply.github.com"
+fi
 
 # docs file -> wiki page name
 copy_page() {
