@@ -1,0 +1,13 @@
+---
+title: "Structuring Successful Dart and Flutter Projects"
+subtitle: "The bulls-eye doctrine, explained — why one team builds software that outlives its first refactor"
+author: "Steve Taylor"
+lang: "en-US"
+description: >-
+  A guided tour of the Dart/Flutter Bible doctrine: clean architecture as a
+  bulls-eye, failures as values with fpdart, the two-adapter rule, and the
+  testing idioms that make the whole thing hold together. Same standard as
+  the repo — with the why filled in.
+rights: "© Steve Taylor, MIT License"
+date: "2026-08-24"
+---

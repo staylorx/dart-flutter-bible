@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Book cover</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 768px; height: 1024px; background: #0f172a; color: #f8fafc;
+         font-family: Georgia, 'Times New Roman', serif; position: relative;
+         overflow: hidden; }
+  .ring::before, .ring::after { content: ""; position: absolute; border-radius: 50%; border: 2px solid rgba(59,130,246,0.35); }
+  .ring::before { width: 560px; height: 560px; right: -180px; top: -140px; }
+  .ring::after { width: 380px; height: 380px; left: -120px; bottom: -100px; border-color: rgba(22,163,74,0.35); }
+  .badge { position: absolute; top: 48px; left: 56px; font-family: 'Courier New', monospace;
+           font-size: 16px; letter-spacing: 3px; color: #94a3b8; text-transform: uppercase; }
+  .title-wrap { position: absolute; top: 300px; left: 56px; right: 56px; }
+  h1 { font-size: 54px; line-height: 1.15; font-weight: normal; letter-spacing: -0.5px; }
+  .subtitle { margin-top: 28px; font-size: 21px; line-height: 1.5; color: #cbd5e1; max-width: 560px; }
+  .rule { position: absolute; bottom: 120px; left: 56px; width: 120px; height: 3px; background: #3b82f6; }
+  .author { position: absolute; bottom: 64px; left: 56px; font-size: 22px; color: #94a3b8; }
+</style>
+</head>
+<body>
+  <div class="ring"></div>
+  <div class="badge">Dart / Flutter Bible</div>
+  <div class="title-wrap">
+    <h1>Structuring Successful Dart and Flutter Projects</h1>
+    <p class="subtitle">The bulls-eye doctrine, explained — why one team builds software that outlives its first refactor</p>
+  </div>
+  <div class="rule"></div>
+  <div class="author">Steve Taylor</div>
+</body>
+</html>

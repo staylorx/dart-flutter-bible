@@ -1,0 +1,20 @@
+digraph DependencyFlow {
+  rankdir=TB;
+  fontname="Helvetica";
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, color="#334155"];
+  edge [color="#64748b", arrowhead=vee, fontname="Helvetica", fontsize=10];
+
+  UI [label="UI ring (Flutter)\nexceptions live here", fillcolor="#e2e8f0"];
+  UC [label="Use case\nthin coordinator", fillcolor="#dbeafe"];
+  REPO [label="Repository contract\n(domain interface)", fillcolor="#eff6ff"];
+  AD1 [label="Adapter 1\ndrift / sqlite3", shape=cylinder, fillcolor="#fef3c7"];
+  AD2 [label="Adapter 2\nsembast or in-memory", shape=cylinder, fillcolor="#fef3c7"];
+  TS [label="Contract test suite", style="rounded,dashed,filled", fillcolor="#fae8ff"];
+
+  UI -> UC [label="calls"];
+  UC -> REPO [label="calls"];
+  REPO -> AD1 [label="implemented by"];
+  REPO -> AD2 [label="implemented by"];
+  TS -> AD1 [style=dashed, label="runs against"];
+  TS -> AD2 [style=dashed, label="runs against"];
+}

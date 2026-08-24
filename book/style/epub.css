@@ -1,0 +1,14 @@
+body { font-family: Georgia, 'Times New Roman', serif; line-height: 1.55; color: #1a1a1a; }
+h1, h2, h3, h4 { font-family: Helvetica, Arial, sans-serif; page-break-after: avoid; }
+h1 { font-size: 1.7em; margin-top: 1.5em; }
+h2 { font-size: 1.35em; margin-top: 1.2em; }
+code { font-family: 'Courier New', Courier, monospace; font-size: 0.88em; background: #f2f2f2; padding: 0.1em 0.3em; border-radius: 3px; }
+pre { font-family: 'Courier New', Courier, monospace; font-size: 0.8em; background: #f7f7f7; padding: 0.8em; border-left: 3px solid #3b82f6; white-space: pre-wrap; }
+figure { margin: 1.2em auto; text-align: center; page-break-inside: avoid; }
+figcaption { font-size: 0.85em; color: #666; margin-top: 0.4em; }
+img { max-width: 100%; height: auto; }
+blockquote { border-left: 3px solid #cbd5e1; margin-left: 0; padding-left: 1em; color: #475569; }
+table { border-collapse: collapse; margin: 1em 0; font-size: 0.9em; }
+th, td { border: 1px solid #cbd5e1; padding: 0.4em 0.6em; }
+th { background: #f1f5f9; }
+a { color: #1d4ed8; }
