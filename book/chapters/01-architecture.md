@@ -34,12 +34,9 @@ The Four Laws are just that answer, stated as constraints:
    failure is a value. This is the rule that turns "error handling" from
    a chore into a type-system feature.
 
-Rust programmers will recognize the fourth law immediately: Rust has no
-exceptions, `Result<T, E>` is a type, and panics belong only at the
-boundary. fpdart's `Either` is the same idea — failure as a value, wired
-into the type system. In some ways, Dart with FP is like Rust for people
-who don't hate themselves: the safety, without the borrow checker arguing
-with you about everything.
+In some ways, Dart with FP is like Rust for people who don't hate
+themselves: the safety, without the borrow checker arguing with you about
+everything.
 
 ![One-direction flow, with two adapters sharing one contract suite](book/diagrams/dependency-flow.png)
 
