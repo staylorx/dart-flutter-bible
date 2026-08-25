@@ -1,0 +1,13 @@
+# 8. The Flutter Ring: Where the Doctrine Meets the User
+
+Chapter 1 placed exceptions in the UI ring; this is the chapter where they live. The Flutter ring is the boundary — the one-third of the doctrine that touches pixels, gestures, and platform APIs. Everything behind it is pure; everything in it is delivery.
+
+**The only seam is the use case.** A widget imports a provider, and the provider wraps a use case. No widget sees a repository, a datasource, or an entity-construction factory. The rule is hard, not advisory: if a widget reaches past the use case, the boundary is broken. Providers expose derived state — loading, data, failure — and the widget's job shrinks to one line: call the use case, render the state. The doctrine is explicit because the temptation is real: it is always easier to fetch in the widget, and the result is always the ghost story from chapter 1.
+
+**Riverpod with plain providers.** No `riverpod_annotation`, no generated code — the no-builders rule from chapter 7 holds here too. `Provider`, `FutureProvider`, `NotifierProvider` suffice; the wiring is manual, the types are explicit, and the IDE navigation works. fpdart's own examples use this style, so the integration between `Either` and provider state is well-trodden. The pattern is simple: the provider calls the use case, `fold`s the `Either`, and exposes a sealed UI state — `AccountLoading`, `AccountLoaded`, `AccountError(String)`.
+
+**Exceptions have a home.** Inside the bulls-eye, failure is a value; at the ring, it becomes a state. A third-party plugin throws — the image decoder, the platform channel — and the widget layer catches it, converts it to a user-visible state, and logs it. Never swallowed, never propagated. The UI ring is the one place `try/catch` is allowed, and even there it is narrow: catch at the boundary, convert to state, render the error. The doctrine's rule from chapter 4 — "exceptions only at the UI ring" — is not a vague preference; it is the line that keeps the rest of the codebase free of invisible control flow.
+
+**Navigation is boring.** `go_router` with one file, no codegen, no magic. The router is part of the delivery mechanism, and it stays thin: it knows routes, not business logic. A route change may trigger a provider invalidation, but the use case still decides what happens next.
+
+This is the ring where architecture becomes experience. The user never sees the bulls-eye; they see the screen. But the screen is only trustworthy because the doctrine holds behind it — the use case is the seam, the failure is a value, and the exception lands exactly where it belongs.
