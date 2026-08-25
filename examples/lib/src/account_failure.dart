@@ -21,3 +21,12 @@ final class AccountAlreadyExists extends AccountFailure {
   /// Creates an already-exists failure for [id].
   const AccountAlreadyExists({required this.id});
 }
+
+/// The backing store failed while reading; mapped up from `DatasourceFailure`.
+final class AccountReadFailed extends AccountFailure {
+  /// Human-readable reason, safe to log.
+  final String reason;
+
+  /// Creates a read failure with [reason].
+  const AccountReadFailed({required this.reason});
+}

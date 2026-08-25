@@ -16,7 +16,7 @@
 - fpdart ALWAYS: Either (sync), TaskEither (async), Option (absence). Pin ^1.2.0; NEVER 2.0-dev (Effect rewrite, pre-release).
 - equatable on every entity/value object: immutable, const constructors, props list.
 - Failures: sealed hierarchies PER LAYER (domain / datasource). Datasource failures mapped upward at the repository. switch over failures is exhaustive.
-- tryCatch ONLY at adapter boundaries, converting third-party exceptions -> Left. No throw/try/catch in domain or usecases.
+- tryCatch ONLY at adapter boundaries, converting third-party exceptions -> Left. Adapter boundary = a LINE not a zone: only `TaskEither.tryCatch`/`Either.tryCatch` wrapping the third-party call itself; hand-rolled try/catch inside adapters = VIOLATION. No throw/try/catch in domain or usecases.
 - TWO-ADAPTER RULE: every repository contract gets >=2 datasource adapters + a shared contract suite run against ALL of them.
 - WIDGETS -> USECASES ONLY: no widget imports repository, datasource, or entity factory; providers wrap use cases.
 - melos.yaml = BAD SMELL. Modern melos 7 + native pub workspaces.
