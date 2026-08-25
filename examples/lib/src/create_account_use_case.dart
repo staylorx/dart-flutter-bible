@@ -18,6 +18,5 @@ class CreateAccountUseCase {
     required String id,
     required String holder,
     IUnitOfWork? uow,
-  }) =>
-      _repository.create(id: id, holder: holder, uow: uow);
+  }) => _repository.create(id: id, holder: holder, uow: uow);
 }

@@ -14,7 +14,8 @@ void main() {
         result
             .getOrElse((_) => throw StateError('expected Right'))
             .id
-            .should.be('acct-1');
+            .should
+            .be('acct-1');
       });
     });
 
@@ -25,7 +26,10 @@ void main() {
 
         result.isLeft().should.be(true);
         result
-            .fold((failure) => failure, (_) => throw StateError('expected Left'))
+            .fold(
+              (failure) => failure,
+              (_) => throw StateError('expected Left'),
+            )
             .should
             .beAssignableTo<AccountAlreadyExists>();
       });
@@ -41,7 +45,10 @@ void main() {
 
         result.isLeft().should.be(true);
         result
-            .fold((failure) => failure, (_) => throw StateError('expected Left'))
+            .fold(
+              (failure) => failure,
+              (_) => throw StateError('expected Left'),
+            )
             .should
             .beAssignableTo<AccountNotFound>();
       });
@@ -52,17 +59,23 @@ void main() {
     final useCase = CreateAccountUseCase(InMemoryAccountRepository());
 
     group('When creating with uow passed to the seam', () {
-      test('Then it still creates the account (non-transactional sink)',
-          () async {
-        final result =
-            await useCase.call(id: 'acct-2', holder: 'Carol', uow: const NoOpUnitOfWork());
+      test(
+        'Then it still creates the account (non-transactional sink)',
+        () async {
+          final result = await useCase.call(
+            id: 'acct-2',
+            holder: 'Carol',
+            uow: const NoOpUnitOfWork(),
+          );
 
-        result.isRight().should.be(true);
-        result
-            .getOrElse((_) => throw StateError('expected Right'))
-            .holder
-            .should.be('Carol');
-      });
+          result.isRight().should.be(true);
+          result
+              .getOrElse((_) => throw StateError('expected Right'))
+              .holder
+              .should
+              .be('Carol');
+        },
+      );
     });
   });
 }

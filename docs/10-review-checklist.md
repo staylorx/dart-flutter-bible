@@ -1,7 +1,7 @@
 # 10. Review Checklist
 
 - [ ] Dependencies point inward? (No domain → application/UI imports.)
-- [ ] Any `throw`/`try`/`catch`/`on Exception` inside domain, use cases, or datasource *business* code? (Allowed: adapter-boundary `tryCatch`, UI ring.)
+- [ ] Any `throw`/`try`/`catch`/`on Exception` inside domain, use cases, or datasource *business* code? (Allowed: the single `TaskEither.tryCatch`/`Either.tryCatch` wrapping the third-party call in adapter methods, and the UI ring — hand-rolled `try/catch` inside adapters is *not* allowed.)
 - [ ] Entities immutable + equatable? Operations return new instances?
 - [ ] Every repository has **≥2 datasource adapters** and runs the contract suite against all of them?
 - [ ] Failures typed, layer-mapped (datasource failure ≠ domain failure leaked)?
