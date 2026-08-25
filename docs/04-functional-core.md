@@ -92,6 +92,8 @@ final result = await Either.Do(
 
 - Convert third-party exceptions *at the adapter boundary only*: `TaskEither.tryCatch(() => ..., (e, st) => DatasourceFailure(...))`. The instant a third-party call throws, it becomes a `Left` and never propagates as an exception.
 
+  "Adapter boundary" is a **line, not a zone**. The only try/catch-shaped code an adapter may contain is `TaskEither.tryCatch` (or `Either.tryCatch`) wrapping the third-party call itself, in the public adapter method; an exception never crosses the adapter's public API. Hand-rolled `try/catch` for imperative control flow inside an adapter is a violation — the adapter does not get a pass on the exception rule, it *owns the conversion seam* precisely because it is the code touching the throwing library.
+
 ### Equality: equatable
 
 Every entity and value object `extends Equatable` with `List<Object?> get props => [...]`. This gives value semantics for `==` and `hashCode`, which fpdart pattern matching, testing, and drift row mapping all rely on. Hand-written, no codegen.
