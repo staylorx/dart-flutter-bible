@@ -52,6 +52,7 @@
 - shouldly: `x.should.be(...)`; never mix expect(). Names: Given/When/Then.
 - Layer matrix: domain = unit, no mocks; usecases = mocktail on interfaces we own; adapters = real in-memory doubles; contract suite on every adapter; widget tests at UI.
 - Every usecase test covers BOTH Either sides (Right happy path + each Left).
+- PITFALLS: fpdart `isRight()`/`isLeft()` are METHODS (never property); no `beTrue`/`beFalse` in shouldly — use `be(true)`/`be(false)` (pin shouldly ^0.5.0+1); `getOrElse`/`fold` callbacks take the Left value (`(_) =>`, never `() =>`); no absolute paths in tests (HOME env or systemTemp + path pkg); extract Right via `getOrElse` after asserting `isRight()`.
 
 ## FLUTTER
 - Riverpod plain providers, NO generator. Manual constructor injection; composition root in the app.

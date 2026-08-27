@@ -46,4 +46,13 @@ group('Given GetAccountUseCase', () {
 
 Every use case test asserts **both** sides of the Either: the `Right` happy path and each `Left` failure (missing entity, invalid input, repository error). A failure path without a test is a bug waiting for the UI to display it.
 
+### Pitfalls (field reports)
+
+Things that have actually bitten people, so they bite no one twice:
+
+- **fpdart `isRight`/`isLeft` are methods, not properties.** `result.isRight()`, never `result.isRight`. The property form compiles into a silently-wrong assertion or an analyzer complaint depending on context — either way it wastes a debugging cycle.
+- **shouldly has no `beTrue`/`beFalse`.** Use `.should.be(true)` / `.should.be(false)`. (shouldly pins here: `shouldly: ^0.5.0+1`; older versions have a different API shape.) 
+- **`getOrElse` / `fold` callbacks receive the Left value.** Write `getOrElse((_) => fallback)`, never `getOrElse(() => fallback)`. Same for `fold((l) => ..., (r) => ...)`.
+- **Never hardcode absolute paths in tests** — no home directories, no `/tmp/foo` literals. Use `Platform.environment['HOME']` (or `Directory.systemTemp`) plus the `path` package. Hardcoded paths are the leading cause of "tests pass on my machine, fail in CI."
+- **Prefer extracting the Right value via `getOrElse` after asserting `isRight()`** — keeps the test readable and the failure message useful.
 ---
