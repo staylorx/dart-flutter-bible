@@ -7,7 +7,7 @@
 | Monorepo | **melos 7** — configured entirely in root `pubspec.yaml` |
 | Formatter | `dart format` only |
 | Analyzer | `dart analyze` — **zero diagnostics of any severity** (errors, warnings, infos) before any commit; gate = `dart analyze --fatal-infos --fatal-warnings` (§2 "Analyzer: zero tolerance") |
-| Docs | Terse `///` on every public member (1–2 lines, what+why) — dartdoc/pub.dev-ready |
+| Docs | Terse `///` on declarations and their public members (1–2 lines, what+why) — **never as a file header** — dartdoc/pub.dev-ready |
 | Tests | `dart test` |
 
 ### Melos: the modern way (and the bad smell)
@@ -74,9 +74,15 @@ reports a pass while any diagnostic remains is wrong, full stop.
 
 We are a Dart shop. Structural changes to `.dart` files are made with Dart tooling (`dart format`, targeted edits), never with Python/shell text-munging scripts. This is non-negotiable and applies to agent workflows too.
 
-### Docs: terse, always
+### Docs: terse, always — and never a file header
 
-Every public class, method, and field gets a `///` doc comment — **at least one line, never more than two**. Say *what* it is and *why* it exists; never restate the implementation. This is a hard requirement: pub.dev scores on doc coverage (`public_member_api_docs`) and every dartdoc-style generator needs real comments to produce anything useful.
+Public **declarations and their members** — classes, enums, extension types, top-level functions, and the public methods/fields on them — get a terse `///` doc comment (**at least one line, never more than two**). Say *what* it is and *why* it exists; never restate the implementation. This is a hard requirement: pub.dev scores on doc coverage (`public_member_api_docs`) and every dartdoc-style generator needs real comments to produce anything useful.
+
+`///` is for **declarations only — never for files.** A doc comment as the first line of a file attaches to the unnamed library, which the analyzer flags as a dangling library doc unless you add a `library;` directive it can hang on. We don't write per-file `library;` directives — they exist only in barrel files (§"Barrel files"), which are deliberate *library* documentation. For ordinary files:
+
+- Notes about the file as a whole (license, attribution, a comment explaining a non-obvious design choice) go in a normal `//` comment, not `///`.
+- If the file contains exactly one public declaration, the first-line `///` belongs **on that declaration**, below the imports — not floating at the top of the file.
+- Adding a `library;` directive just to satisfy a file-level `///` is a violation.
 
 - **Use cases are the priority.** Every `*UseCase` documents what it does and what it returns.
 - Enforce it: enable `public_member_api_docs` in `analysis_options.yaml`; keep `dart analyze` clean.
@@ -109,7 +115,7 @@ See `examples/` (`bible_samples`) for the CI-tested reference.
 Not every rule in this bible can be automated. Know which is which:
 
 **Lint-enforced (self-enforcing — `dart analyze` is the gate):**
-- `public_member_api_docs` — missing `///` on any public member fails the build. Note: stricter than pub.dev's scoring floor (≥20% coverage earns full points); we hold the harder line on purpose.
+- `public_member_api_docs` — missing `///` on any public declaration or member fails the build. It does *not* require file-level docs — we're stricter than pub.dev on where docs are required (declarations), and we ban them where they don't belong (file headers).
 - `implementation_imports` — cross-package `package:thing/src/...` imports fail. Already on by default via `package:lints/recommended`.
 
 **Review-enforced (no lint exists — don't invent one):**

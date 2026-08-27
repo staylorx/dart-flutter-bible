@@ -22,7 +22,7 @@
 - melos.yaml = BAD SMELL. Modern melos 7 + native pub workspaces.
 - SDK constraint: '>=3.10.0 <4.0.0' in every pubspec.
 - One class per file; ONE hand-written barrel per package (`lib/<pkg>.dart` re-exports `lib/src/`; never import `src/` across packages). dart format / dart analyze / dart test only. Dart-first editing: no Python/sed rewriting .dart files.
-- TERSE DOCS: every public member gets `///` (1-2 lines, what+why, never how) — dartdoc/pub.dev-ready; `public_member_api_docs` lint ON. Use cases MUST be documented.
+- TERSE DOCS: `///` on declarations and their public members (1-2 lines, what+why, never how) — **never as a file header** (file-level `///` requires a `library;` — barrels only) — dartdoc/pub.dev-ready; `public_member_api_docs` lint ON. Use cases MUST be documented.
 - PARAMS: usecase/repo methods take DISCRETE business params (id, userName, ...), never cargo objects (AddUserUseCase(UserBlockOfStuff) = NO). Dart: named params except single positional `ref`/`message`; Flutter follows Flutter.
 - ENFORCEMENT: lint-enforced (analyze gate) = public_member_api_docs + implementation_imports (default-on); review-enforced (§10) = cargo params, barrel freshness. Don't invent lints for taste rules. CLEAN = ZERO diagnostics of ANY severity (errors+warnings+infos); gate = dart analyze --fatal-infos --fatal-warnings; todo:error in analysis_options (roadmap doc, not code comments); ignores per-line only, never ignore_for_file/blanket.
 - CODE PLACEMENT: tests FIRST for example code; `examples/` only for packages (pub.dev) or genuine need (e.g., core facade for GUI implementers); never READMEs/prose; doctrine docs carry tight snippets only.
@@ -65,7 +65,7 @@
 
 ## DECISIONS (settled; §11 = human change record, doctrine wins)
 - State: Riverpod (plain providers). DI: manual constructor injection. Nav: go_router. JSON codegen: banned for now. License: MIT. Wiki: auto-synced by wiki-sync GitHub Action on every push to main.
-- Docs: terse `///` on every public member (1-2 lines, what+why); public_member_api_docs ON; use cases documented. Params: named except single positional ref/message; usecase call() = discrete business params, never cargo objects. Barrels: one hand-written per package (lib/<pkg>.dart), never import src/ across packages. Flutter follows Flutter conventions.
+- Docs: terse `///` on declarations and their members (1-2 lines, what+why), **never as a file header** (file-level `///` requires a `library;` — barrels only); public_member_api_docs ON; use cases documented. Params: named except single positional ref/message; usecase call() = discrete business params, never cargo objects. Barrels: one hand-written per package (lib/<pkg>.dart), never import src/ across packages. Flutter follows Flutter conventions.
 
 ## LINKS
 - Repo: https://github.com/staylorx/dart-flutter-bible · Wiki: https://github.com/staylorx/dart-flutter-bible/wiki

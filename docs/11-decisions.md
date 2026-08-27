@@ -12,7 +12,7 @@ Doctrine lives in §1–§10 — that is the single source of truth. This sectio
 | drift for sqlite3 (only sanctioned builder) | §5 Persistence, §7 Builders | Typed ORM; testable with `NativeDatabase.memory()` |
 | shouldly + mocktail, Given/When/Then names | §6 Testing | "should be" idiom; mocks only at the use-case seam |
 | fpdart ^1.2.0 pinned everywhere | §4 Functional Core | Failure is a value; 2.0-dev is a pre-release Effect rewrite |
-| Terse `///` docs on every public member | §2 Toolchain | dartdoc/pub.dev-ready; `public_member_api_docs` gates it |
+| Terse `///` on declarations and members; never a file header (barrels only) | §2 Toolchain | dartdoc/pub.dev-ready; `public_member_api_docs` gates it; file-level `///` requires `library;` — that's for barrels |
 | Use-case `call()` takes discrete business params | §4 Functional Core | Signature is the documentation; no cargo objects |
 | Named params (sole exceptions: `ref`/`message`); Flutter follows Flutter | §2 Toolchain | Readable call sites; don't fight the framework |
 | One hand-written barrel per package | §2 Toolchain | `src/` is private; what's exported *is* the public API |
