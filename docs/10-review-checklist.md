@@ -8,7 +8,7 @@
 - [ ] sqlite3 done with drift? Any other ORM/raw sqlite3 in the tree?
 - [ ] Any unapproved builder/codegen (freezed, json_serializable, riverpod_generator)? If yes — why?
 - [ ] Tests: shouldly only (no `expect()` mixing), Given/When/Then names, both Either sides covered, mocks only at the use-case seam with mocktail?
-- [ ] Every public member carries a terse `///` doc comment (1–2 lines, what+why)? Use cases documented?
+- [ ] Every declaration and public member carries a terse `///` doc comment (1–2 lines, what+why)? **No `///` file headers** (that forces a `library;` — barrel files only)? Use cases documented?
 - [ ] Use-case `call()` takes discrete business params (`id`, `userName`, …), never cargo/container objects?
 - [ ] Dart named parameters everywhere (sole exceptions: single positional `ref`/`message`)? Flutter widgets follow Flutter conventions?
 - [ ] One hand-written barrel per package (`lib/<package>.dart` re-exports `lib/src/`), no `src/` imports across packages?
