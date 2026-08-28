@@ -54,5 +54,6 @@ Things that have actually bitten people, so they bite no one twice:
 - **shouldly has no `beTrue`/`beFalse`.** Use `.should.be(true)` / `.should.be(false)`. (shouldly pins here: `shouldly: ^0.5.0+1`; older versions have a different API shape.) 
 - **`getOrElse` / `fold` callbacks receive the Left value.** Write `getOrElse((_) => fallback)`, never `getOrElse(() => fallback)`. Same for `fold((l) => ..., (r) => ...)`.
 - **Never hardcode absolute paths in tests** — no home directories, no `/tmp/foo` literals. Use `Platform.environment['HOME']` (or `Directory.systemTemp`) plus the `path` package. Hardcoded paths are the leading cause of "tests pass on my machine, fail in CI."
+- **fpdart chains are lazy — nothing runs until `.run()`.** Building a `TaskEither` chain executes zero callbacks; only `.run()` (or `await`) drives it. The classic bug: mutate a captured list inside a `flatMap` callback, then iterate that list *after* building the chain but before `.run()` — the loop sees the pre-mutation list (ResolveSchema-style bugs: every call returns `[]`). If a use case must collect intermediate results, thread them through the chain (`.flatMap((acc) => ...)`), never a captured mutable list.
 - **Prefer extracting the Right value via `getOrElse` after asserting `isRight()`** — keeps the test readable and the failure message useful.
 ---

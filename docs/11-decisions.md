@@ -17,6 +17,8 @@ Doctrine lives in §1–§10 — that is the single source of truth. This sectio
 | Named params (sole exceptions: `ref`/`message`); Flutter follows Flutter | §2 Toolchain | Readable call sites; don't fight the framework |
 | One hand-written barrel per package | §2 Toolchain | `src/` is private; what's exported *is* the public API |
 | UnitOfWork | §5 Persistence | Optional `IUnitOfWork? uow` on write methods; reads may take one too; adapters wrap real transactions or gracefully sink |
+| fpdart termination | §4 Functional Core | Public seam is `Future<Either<F,T>>`; `.run()` at the public method boundary inside the layer; consumers never build/run TaskEither chains |
+| Riverpod never in core | §8 Flutter Ring | Core = pure Dart, zero `flutter_riverpod`; providers wrap use cases in the UI ring only |
 | Code placement | §2 Toolchain | Tests first; `examples/` for packages (pub.dev) or genuine need (e.g., core facade for GUI); never READMEs/prose |
 | Lint-enforced vs review-enforced split | §2 Toolchain | Self-enforce what's automatable; taste rules stay in review |
 

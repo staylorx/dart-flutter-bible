@@ -94,6 +94,14 @@ final result = await Either.Do(
 
   "Adapter boundary" is a **line, not a zone**. The only try/catch-shaped code an adapter may contain is `TaskEither.tryCatch` (or `Either.tryCatch`) wrapping the third-party call itself, in the public adapter method; an exception never crosses the adapter's public API. Hand-rolled `try/catch` for imperative control flow inside an adapter is a violation — the adapter does not get a pass on the exception rule, it *owns the conversion seam* precisely because it is the code touching the throwing library.
 
+### Where the chain ends: `.run()` at the public seam
+
+TaskEither is the **internal** composition type. The **public seam is `Future<Either<Failure, T>>`** — repository contract methods and use case `call()` signatures are `Future<Either<...>>`, never `TaskEither<...>`.
+
+- **`.run()` terminates the chain at the public method boundary, inside the implementation.** A use case composes with TaskEither internally (`flatMap`, Do-notation, `tryCatch` at the adapter) and the last thing its `call()` does is `.run()` (or `await ... .run()`), returning the plain `Future<Either<...>>`.
+- **Consumers (UI, CLI, other use cases) never build or run TaskEither chains.** They await a `Future<Either<...>>` and `fold` it. This is the termination the user wants: fpdart's laziness dies in the core, not in the widget tree. (Consumers will still import fpdart to `fold`/`getOrElse` an `Either` — that is expected and fine; what they never touch is chain-building, laziness, and `.run()`.)
+- **Why:** laziness leaks out of the core, it becomes a UI problem (forgetting `.run()`, mutating captured lists inside lazy callbacks, debugging chains that "did nothing"). Keep `.run()` inside the layer that built the chain; the boundary is the type change `TaskEither → Future<Either>`.
+
 ### Equality: equatable
 
 Every entity and value object `extends Equatable` with `List<Object?> get props => [...]`. This gives value semantics for `==` and `hashCode`, which fpdart pattern matching, testing, and drift row mapping all rely on. Hand-written, no codegen.

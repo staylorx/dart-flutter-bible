@@ -13,7 +13,7 @@
 ## RULES (non-negotiable)
 - Bulls-eye clean architecture: entities at center; dependencies point INWARD; flow one direction UI -> usecase -> repository -> datasource.
 - Exceptions ONLY at the UI ring. Everywhere else, failure is a VALUE.
-- fpdart ALWAYS: Either (sync), TaskEither (async), Option (absence). Pin ^1.2.0; NEVER 2.0-dev (Effect rewrite, pre-release).
+- fpdart ALWAYS: Either (sync), TaskEither (async), Option (absence). Pin ^1.2.0; NEVER 2.0-dev (Effect rewrite, pre-release). Public seam = `Future<Either<F,T>>`; `.run()` at the public method boundary inside the layer (TaskEither is internal composition; consumers never build/run chains).
 - equatable on every entity/value object: immutable, const constructors, props list.
 - Failures: sealed hierarchies PER LAYER (domain / datasource). Datasource failures mapped upward at the repository. switch over failures is exhaustive.
 - tryCatch ONLY at adapter boundaries, converting third-party exceptions -> Left. Adapter boundary = a LINE not a zone: only `TaskEither.tryCatch`/`Either.tryCatch` wrapping the third-party call itself; hand-rolled try/catch inside adapters = VIOLATION. No throw/try/catch in domain or usecases.
@@ -45,18 +45,20 @@
 ## PERSISTENCE
 - sqlite3 -> drift. Tests: NativeDatabase.memory().
 - File store -> sembast. Tests: databaseFactoryMemory.
-- UnitOfWork: write methods take optional `IUnitOfWork? uow` (reads MIGHT take one); transactional adapters (drift/sembast/isar) wrap real transactions, others gracefully sink (NoOp/best-effort). Contract stays uniform.
+- UnitOfWork: write methods take optional `IUnitOfWork? uow` (reads MIGHT take one); transactional adapters (drift/sembast/isar) wrap real transactions, others gracefully sink (NoOp/best-effort). Contract stays uniform. PITFALLS: keep native client on the txn for the WHOLE work() run (await work() inside the txn callback — resetting early deadlocks); a many-store wipe is ONE UoW or it isn't atomic; provider invalidation is NOT a wipe (persistent rows survive — regression-test with real adapter in memory mode).
 - Repository + datasource CONTRACTS live in the domain package. Repos orchestrate/validate; datasources do mechanical I/O. Contract tests live in core, never the UI repo.
 
 ## TESTING
 - shouldly: `x.should.be(...)`; never mix expect(). Names: Given/When/Then.
 - Layer matrix: domain = unit, no mocks; usecases = mocktail on interfaces we own; adapters = real in-memory doubles; contract suite on every adapter; widget tests at UI.
 - Every usecase test covers BOTH Either sides (Right happy path + each Left).
-- PITFALLS: fpdart `isRight()`/`isLeft()` are METHODS (never property); no `beTrue`/`beFalse` in shouldly — use `be(true)`/`be(false)` (pin shouldly ^0.5.0+1); `getOrElse`/`fold` callbacks take the Left value (`(_) =>`, never `() =>`); no absolute paths in tests (HOME env or systemTemp + path pkg); extract Right via `getOrElse` after asserting `isRight()`.
+- PITFALLS: fpdart `isRight()`/`isLeft()` are METHODS (never property); no `beTrue`/`beFalse` in shouldly — use `be(true)`/`be(false)` (pin shouldly ^0.5.0+1); `getOrElse`/`fold` callbacks take the Left value (`(_) =>`, never `() =>`); no absolute paths in tests (HOME env or systemTemp + path pkg); extract Right via `getOrElse` after asserting `isRight()`; fpdart chains are LAZY — nothing runs until `.run()`, never mutate a captured list inside a lazy callback and iterate it eagerly (thread through the chain).
 
 ## FLUTTER
 - Riverpod plain providers, NO generator. Manual constructor injection; composition root in the app.
+- **Riverpod NEVER enters the core** — zero `flutter_riverpod` in domain/usecases/datasources; core stays pure Dart, headless-buildable. If a core package "needs" a provider, the design is wrong (use case is the seam).
 - Widget job: call usecase -> render state. Exceptions caught at the boundary, converted to UI state, never swallowed.
+- PITFALL: don't move a widget under a stationary cursor if you rely on MouseRegion.onExit (flutter/flutter#44957 — onExit silently dropped in ListView; keep the button stationary, render warnings below).
 
 ## BOOTSTRAP (new project)
 1 read compact (or full) bible; 2 root pubspec with workspace + melos keys (no melos.yaml); 3 packages: domain / usecases / 2 datasource adapters / app; 4 resolution: workspace + melos bootstrap; 5 contracts first (entities, failures, I*Repository, datasource interfaces); 6 two adapters + contract suite from day one; 7 lints incl. public_member_api_docs + todo:error; dart analyze --fatal-infos --fatal-warnings clean (ZERO diagnostics of any severity); 8 first usecase (documented, business-param call, named params) + both-sides test; 9 CI runs analyze + test.
