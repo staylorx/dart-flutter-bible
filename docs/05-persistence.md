@@ -4,7 +4,7 @@
 
 `thing_domain` defines `IAccountRepository` and `IAccountDatasource` (if the repository needs a datasource seam). The domain package owns the *contract*; it owns no implementation.
 
-### The Two-Adapter Rule in practice
+### The At Least Two Repository Adapter Rule in practice
 
 For every repository:
 

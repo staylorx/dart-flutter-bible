@@ -21,6 +21,7 @@ Doctrine lives in §1–§10 — that is the single source of truth. This sectio
 | Riverpod never in core | §8 Flutter Ring | Core = pure Dart, zero `flutter_riverpod`; providers wrap use cases in the UI ring only |
 | Code placement | §2 Toolchain | Tests first; `examples/` for packages (pub.dev) or genuine need (e.g., core facade for GUI); never READMEs/prose |
 | Lint-enforced vs review-enforced split | §2 Toolchain | Self-enforce what's automatable; taste rules stay in review |
+| D.R.Y. — single source of truth; project docs (README/AGENTS.md) reference doctrine, never restate it | §1 Architecture, §10 Review | A second copy is a second truth; READMEs drift the moment doctrine changes |
 
 ### Proposals
 

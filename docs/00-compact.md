@@ -17,7 +17,7 @@
 - equatable on every entity/value object: immutable, const constructors, props list.
 - Failures: sealed hierarchies PER LAYER (domain / datasource). Datasource failures mapped upward at the repository. switch over failures is exhaustive.
 - tryCatch ONLY at adapter boundaries, converting third-party exceptions -> Left. Adapter boundary = a LINE not a zone: only `TaskEither.tryCatch`/`Either.tryCatch` wrapping the third-party call itself; hand-rolled try/catch inside adapters = VIOLATION. No throw/try/catch in domain or usecases.
-- TWO-ADAPTER RULE: every repository contract gets >=2 datasource adapters + a shared contract suite run against ALL of them.
+- AT-LEAST-TWO REPOSITORY ADAPTER RULE: every repository contract gets >=2 repository adapters + a shared contract suite run against ALL of them.
 - WIDGETS -> USECASES ONLY: no widget imports repository, datasource, or entity factory; providers wrap use cases.
 - melos.yaml = BAD SMELL. Modern melos 7 + native pub workspaces.
 - SDK constraint: '>=3.10.0 <4.0.0' in every pubspec.
@@ -26,6 +26,7 @@
 - PARAMS: usecase/repo methods take DISCRETE business params (id, userName, ...), never cargo objects (AddUserUseCase(UserBlockOfStuff) = NO). Dart: named params except single positional `ref`/`message`; Flutter follows Flutter.
 - ENFORCEMENT: lint-enforced (analyze gate) = public_member_api_docs + implementation_imports (default-on); review-enforced (§10) = cargo params, barrel freshness. Don't invent lints for taste rules. CLEAN = ZERO diagnostics of ANY severity (errors+warnings+infos); gate = dart analyze --fatal-infos --fatal-warnings; todo:error in analysis_options (roadmap doc, not code comments); ignores per-line only, never ignore_for_file/blanket.
 - CODE PLACEMENT: tests FIRST for example code; `examples/` only for packages (pub.dev) or genuine need (e.g., core facade for GUI implementers); never READMEs/prose; doctrine docs carry tight snippets only.
+- D.R.Y.: single source of truth — doctrine lives HERE; project READMEs/AGENTS.md reference rules, never restate them (a second copy is a second truth). Repo AGENTS.md = that repo's deviations + local wiring only; READMEs orient, carry no rules/architecture.
 
 ## STACK (pinned)
 - fpdart ^1.2.0 · equatable ^2.x · shouldly (assertions, "should be" idiom) · mocktail (mocks, usecase seam only) · drift + drift_dev + build_runner (sqlite3 ORM; SANCTIONED codegen) · sembast (pure-Dart file store) · melos ^7.0.0 · flutter_riverpod (plain providers) · go_router (nav).
@@ -61,10 +62,10 @@
 - PITFALL: don't move a widget under a stationary cursor if you rely on MouseRegion.onExit (flutter/flutter#44957 — onExit silently dropped in ListView; keep the button stationary, render warnings below).
 
 ## BOOTSTRAP (new project)
-1 read compact (or full) bible; 2 root pubspec with workspace + melos keys (no melos.yaml); 3 packages: domain / usecases / 2 datasource adapters / app; 4 resolution: workspace + melos bootstrap; 5 contracts first (entities, failures, I*Repository, datasource interfaces); 6 two adapters + contract suite from day one; 7 lints incl. public_member_api_docs + todo:error; dart analyze --fatal-infos --fatal-warnings clean (ZERO diagnostics of any severity); 8 first usecase (documented, business-param call, named params) + both-sides test; 9 CI runs analyze + test.
+1 read compact (or full) bible; 2 root pubspec with workspace + melos keys (no melos.yaml); 3 packages: domain / usecases / 2 datasource adapters / app; 4 resolution: workspace + melos bootstrap; 5 contracts first (entities, failures, I*Repository, datasource interfaces); 6 at least two repository adapters + contract suite from day one; 7 lints incl. public_member_api_docs + todo:error; dart analyze --fatal-infos --fatal-warnings clean (ZERO diagnostics of any severity); 8 first usecase (documented, business-param call, named params) + both-sides test; 9 CI runs analyze + test.
 
 ## REVIEW (checklist)
-- Inward dependencies? Throw/try/catch outside UI ring? Entities immutable + equatable? >=2 adapters + contract suite? Failure layers mapped, no leakage? drift the only ORM? Unapproved builders? shouldly only, GWT names, both Either sides? No melos.yaml? analyze (fatal flags) + test green, ZERO diagnostics any severity? No TODO/FIXME (roadmap doc)? Ignores per-line only? Public API documented (<=2 lines, use cases included)? Params business-shaped, no cargo? Named params (except ref/message)? One barrel per package, no src/ imports?
+- Inward dependencies? Throw/try/catch outside UI ring? Entities immutable + equatable? >=2 repository adapters + contract suite? Failure layers mapped, no leakage? drift the only ORM? Unapproved builders? shouldly only, GWT names, both Either sides? No melos.yaml? analyze (fatal flags) + test green, ZERO diagnostics any severity? No TODO/FIXME (roadmap doc)? Ignores per-line only? Public API documented (<=2 lines, use cases included)? Params business-shaped, no cargo? Named params (except ref/message)? One barrel per package, no src/ imports? D.R.Y. (no restated rules in READMEs/AGENTS/comments)?
 
 ## DECISIONS (settled; §11 = human change record, doctrine wins)
 - State: Riverpod (plain providers). DI: manual constructor injection. Nav: go_router. JSON codegen: banned for now. License: MIT. Wiki: auto-synced by wiki-sync GitHub Action on every push to main.

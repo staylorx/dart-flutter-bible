@@ -37,11 +37,19 @@ Future<Either<AccountFailure, Account>> call({required String id}) =>
     _repository.get(id: id);
 ```
 
-### The Two-Adapter Rule (the one we never skip)
+### The At Least Two Repository Adapter Rule (the one we never skip)
 
-**Every repository contract gets at least two datasource adapters.** One real persistence adapter is not enough — with only one adapter, the contract is whatever that adapter happens to do. Two adapters (e.g. drift/sqlite + in-memory, or drift + sembast) force the contract to be the *interface*, and a shared **contract test suite** runs against every adapter, so a deviation in any implementation fails CI.
+**Every repository contract gets at least two repository adapters.** One real persistence adapter is not enough — with only one adapter, the contract is whatever that adapter happens to do. Two adapters (e.g. drift/sqlite + in-memory, or drift + sembast) force the contract to be the *interface*, and a shared **contract test suite** runs against every adapter, so a deviation in any implementation fails CI.
 
 In-memory adapters are legitimate second adapters, and they double as the test double for use-case tests — prefer them over mocking where feasible.
+
+### Don't Repeat Yourself (D.R.Y.)
+
+Doctrine lives here, in exactly one place. Repo docs (README, AGENTS.md) and code comments **reference** a rule; they never restate it — a second copy is a second truth the moment the first one changes.
+
+- The bible is the doctrine source. A repo's AGENTS.md records only that repo's deviations and local wiring; READMEs orient (what it is, how to run it) and carry no rules or architecture.
+- If a rule already exists, link to it — do not copy it into another doc.
+- Any fact stated twice will drift; when two copies disagree, both are suspect and the fix is deletion, not reconciliation.
 
 ### The API surface (docs, params, style)
 
