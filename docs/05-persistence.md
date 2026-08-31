@@ -4,7 +4,7 @@
 
 `thing_domain` defines `IAccountRepository` and `IAccountDatasource` (if the repository needs a datasource seam). The domain package owns the *contract*; it owns no implementation.
 
-### The Two-Adapter Rule in practice
+### The At Least Two Repository Adapter Rule in practice
 
 For every repository:
 
@@ -60,6 +60,12 @@ abstract interface class IAccountRepository {
 - **`IUnitOfWork`** is a domain-package contract (`run<T>(Future<T> Function() work)`); transactional adapters implement it over their native transaction (`db.transaction(...)`).
 - **Write methods** (`create`, `update`, `delete`, …) take `IUnitOfWork? uow` — optional at the seam, so callers can join a transaction when they need atomicity. **Reads** (`get`, `list`) *may* take one too: usually they don't, but a read inside a transaction (consistency, read-your-writes) should accept it. Reads never *require* it.
 - **Every adapter does the honest thing:** drift/sembast/isar wrap their real transaction; JSON and other non-transactional stores gracefully emulate or sink it (best-effort single load-modify-persist, or `NoOpUnitOfWork`). The contract still declares `uow`, so the seam is uniform — callers who need atomicity get it where the store can provide it, and nothing silently breaks where it can't.
+
+### UnitOfWork pitfalls (field reports)
+
+- **Transactional adapters: keep the native client on the txn for the WHOLE `work()` run.** `IUnitOfWork.run(work)` must `await work()` *inside* the native transaction callback (e.g. sembast's `db.transaction((txn) async { await work(); })`) — the adapter's `client` stays the transaction client for the entire run. Resetting to the root client early deadlocks: DB-client operations wait on the still-open transaction (sembast deletes hang).
+- **A wipe of many stores is ONE unit of work, or it isn't atomic.** `clearAll()` across every `I*Repository` runs inside a single `IUnitOfWork`: a mid-clear failure rolls the WHOLE wipe back — never a half-cleared database. Non-transactional stores emulate (JSON: buffer the single doc, write once on success, discard buffer on failure) or sink (memory: synchronous, nothing can fail; `NoOpUnitOfWork`).
+- **Provider invalidation is NOT a wipe.** In the UI ring, invalidating repository providers only rebuilds the adapters — rows in a persistent store survive (sembast/IndexedDB/sqlite). Tests that omit real overrides use in-memory adapters and never see this; regression-test the clear/wipe path with the real persistent adapter in memory mode (e.g. `databaseFactoryMemory`).
 
 ### General rules
 

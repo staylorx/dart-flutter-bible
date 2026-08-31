@@ -12,6 +12,8 @@ Flutter is delivery. All the doctrine above applies *behind* it; this section is
 
 **Riverpod with plain providers** (`flutter_riverpod`) — settled doctrine, no generator (`riverpod_annotation` is banned, §7). Use cases are exposed as providers; widgets reach use cases through providers and never see repositories, datasources, or entity construction. fpdart's own docs and examples use Riverpod, so the integration is well-trodden.
 
+**Riverpod NEVER enters the core.** Zero `flutter_riverpod` imports in domain, use cases, or datasource packages — the core is pure Dart (§3) and must stay buildable headless. If a core package "needs" a provider, the design is wrong: the use case is the seam, and the provider wraps *it*. Riverpod lives in the UI ring only — `flutter_riverpod` may appear only in the Flutter app's composition root and widgets/providers.
+
 ### The only seam: use cases
 
 **Widgets interact with exactly one thing: use cases** (normally reached through providers). Hard rule, not a preference:
@@ -47,6 +49,7 @@ class AccountView extends ConsumerWidget {
 - One-direction flow: event → provider → use case → state → widget rebuild.
 - Keep `build` methods small; extract `StatelessWidget`/`const` sub-widgets.
 - No `BuildContext` passed into use cases or repositories, ever.
+- **Pitfall (field report): don't move a widget under a stationary cursor if you rely on `MouseRegion.onExit`.** Flutter deliberately does not fire `onExit` when a widget moves beneath a stationary pointer (flutter/flutter#44957) — inside a `ListView` the mouse tracker silently drops the annotation. A warning rendered ABOVE a button pushed the button down ~52px on arming, so the armed state never disarmed and the pointer was left hanging over the warning. Keep the button stationary; render warnings below it, or sync the armed state from state rather than exit events.
 
 ### Flutter tests
 
